@@ -33,21 +33,27 @@ struct Data
  */
 istream &operator>>(istream &input, Data &data)
 {
-    cout << "Phone Number: ";
+    cout << "Phone Number:\t";
     input.ignore();
     input >> data.phoneNumber;
-    cout << "Name: ";
+
+    cout << "Name:\t\t";
     // input >> data.name;
     input.ignore();
     getline(input, data.name);
-    cout << "Address: ";
+
+    cout << "Address:\t";
     // input >> data.address;
-    input.ignore();
+    // input.ignore();
     getline(input, data.address);
 
-    cout << "Use email? (y/n)";
+    cout << endl
+         << "Currently: " << data.phoneNumber << "," << data.name << "," << data.address << endl
+         << endl;
+
+    cout << "Use email? (y/n): ";
     char choice;
-    cin.ignore();
+    // cin.ignore();
     cin >> choice;
     if (choice != 'y' && choice != 'Y')
     {
@@ -55,8 +61,8 @@ istream &operator>>(istream &input, Data &data)
         return input;
     }
 
-    cout << "Email: ";
-    input.ignore();
+    cout << "Email:\t\t";
+    // input.ignore();
     input >> data.email;
     return input;
 }
@@ -176,7 +182,6 @@ public:
         }
 
         node *newNode = new node;
-
         if (searchMatrix(value))
         {
             cout << "Data with this Phone Number already exists! Try again with different number!\n"
@@ -188,14 +193,9 @@ public:
 
         if (isMatrixEmpty())
         {
-            first = newNode;
-            last = newNode;
-            first->up = NULL;
-            first->down = NULL;
-            first->left = NULL;
-            first->right = NULL;
-            first->index = 0;
-            last->index = 0;
+            first = last = newNode;
+            first->up = first->down = first->left = first->right = NULL;
+            first->index = last->index = 0;
 
             cout << "Added " << last->userData.name << "'s data at index: " << last->index << endl;
 
@@ -387,7 +387,7 @@ public:
         cout << "Node Data:" << endl
              << "Phone Number:\t" << temp->userData.phoneNumber << endl
              << "Name:\t\t" << temp->userData.name << endl
-             << "Address:\t\t" << temp->userData.address << endl
+             << "Address:\t" << temp->userData.address << endl
              << "Email:\t\t" << temp->userData.email << endl
              << endl;
     }
@@ -447,22 +447,8 @@ public:
      */
     bool searchMatrix(Data searchData)
     {
-        if ((first->userData.address == searchData.address) || (first->userData.email == searchData.email) || (first->userData.name == searchData.name) || (first->userData.phoneNumber == searchData.phoneNumber))
-        {
-            cout << "Found at index 0!" << endl
-                 << "Node Data:" << endl;
-            displayNode(first);
-            return true;
-        }
-        else if ((last->userData.address == searchData.address) || (last->userData.email == searchData.email) || (last->userData.name == searchData.name) || (last->userData.phoneNumber == searchData.phoneNumber))
-        {
-            cout << "Found at index 15!" << endl;
-            displayNode(last);
-            return true;
-        }
-
-        node *ptrTemp = first->right;
-        while (ptrTemp != last)
+        node *ptrTemp = first;
+        while (ptrTemp != NULL)
         {
             if ((ptrTemp->userData.address == searchData.address) || (ptrTemp->userData.email == searchData.email) || (ptrTemp->userData.name == searchData.name) || (ptrTemp->userData.phoneNumber == searchData.phoneNumber))
 

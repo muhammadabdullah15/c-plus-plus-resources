@@ -197,7 +197,8 @@ void searchMenu(MatrixLinkedList *matrix)
                 system("cls");
                 cout << "Enter name to search: ";
                 cin >> searchData.name;
-                matrix->searchMatrix(searchData);
+                if (!matrix->searchMatrix(searchData))
+                    cout << "User data not found!\n";
                 system("pause");
                 break;
             }
@@ -206,7 +207,8 @@ void searchMenu(MatrixLinkedList *matrix)
                 system("cls");
                 cout << "Enter address to search: ";
                 cin >> searchData.address;
-                matrix->searchMatrix(searchData);
+                if (!matrix->searchMatrix(searchData))
+                    cout << "User data not found!\n";
                 system("pause");
                 break;
             }
@@ -215,7 +217,8 @@ void searchMenu(MatrixLinkedList *matrix)
                 system("cls");
                 cout << "Enter email to search: ";
                 cin >> searchData.email;
-                matrix->searchMatrix(searchData);
+                if (!matrix->searchMatrix(searchData))
+                    cout << "User data not found!\n";
                 system("pause");
                 break;
             }
@@ -380,6 +383,7 @@ void mainMenu(MatrixLinkedList *matrix)
 
         Set[counter - 1] = 12;
     }
+    mainMenu(matrix);
 }
 
 /**
