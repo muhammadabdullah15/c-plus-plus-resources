@@ -51,23 +51,7 @@ void addMenu(MatrixLinkedList *matrix)
                 system("cls");
                 {
                     Data temp;
-                    cout << "Enter values for node " << endl;
-                    cout << "Phone Number: ";
-                    cin >> temp.phoneNumber;
-
-                    if (matrix->searchMatrix(temp))
-                    {
-                        cout << "Phone number already exists!\nPLease try again with different number\n";
-                        return;
-                    }
-
-                    cout << "Name: ";
-                    cin >> temp.name;
-                    cout << "Address: ";
-                    cin >> temp.address;
-                    cout << "Email: ";
-                    cin >> temp.email;
-
+                    cin >> temp;
                     matrix->addNodeAtEnd(temp);
                     system("pause");
                 }

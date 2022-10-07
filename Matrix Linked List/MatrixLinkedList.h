@@ -10,7 +10,10 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 using namespace std;
+
+class MatrixLinkedList;
 
 /**
  * @brief Structure to store user data
@@ -20,6 +23,57 @@ struct Data
 {
     string phoneNumber, name, address, email;
 };
+
+/**
+ * @brief Operator overloading for taking input of Data
+ *
+ * @param input Cin object
+ * @param data Data object
+ * @return istream& Input buffer
+ */
+istream &operator>>(istream &input, Data &data)
+{
+    cout << "Phone Number: ";
+    input.ignore();
+    input >> data.phoneNumber;
+    cout << "Name: ";
+    // input >> data.name;
+    input.ignore();
+    getline(input, data.name);
+    cout << "Address: ";
+    // input >> data.address;
+    input.ignore();
+    getline(input, data.address);
+
+    cout << "Use email? (y/n)";
+    char choice;
+    cin.ignore();
+    cin >> choice;
+    if (choice != 'y' && choice != 'Y')
+    {
+        data.email = "N/A";
+        return input;
+    }
+
+    cout << "Email: ";
+    input.ignore();
+    input >> data.email;
+    return input;
+}
+
+/**
+ * @brief Swap data of two Data objects
+ *
+ * @param a First Data
+ * @param b Second Data
+ */
+void swapData(Data &a, Data &b)
+{
+    Data temp = a;
+    a = b;
+    b = temp;
+    return;
+}
 
 /**
  * @brief Matrix class
@@ -65,16 +119,18 @@ public:
         {
             Data temp;
             cout << "Enter values for node " << i << endl;
-            cout << "Phone Number: ";
-            cin >> temp.phoneNumber;
-            cout << "Name: ";
-            cin >> temp.name;
-            cout << "Address: ";
-            cin >> temp.address;
-            cout << "Email: ";
-            cin >> temp.email;
+            cin >> temp;
             addNodeAtEnd(temp);
         }
+    }
+
+    /**
+     * @brief Destroy the Matrix Linked List object by clearing all nodes
+     *
+     */
+    ~MatrixLinkedList()
+    {
+        clearMatrixNodes();
     }
 
     /**
@@ -120,6 +176,14 @@ public:
         }
 
         node *newNode = new node;
+
+        if (searchMatrix(value))
+        {
+            cout << "Data with this Phone Number already exists! Try again with different number!\n"
+                 << endl;
+            return;
+        }
+
         newNode->userData = value;
 
         if (isMatrixEmpty())
@@ -195,21 +259,13 @@ public:
         Data value;
 
         cout << "Enter values for node" << endl;
-        cout << "Phone Number: ";
-        cin >> value.phoneNumber;
-
+        cin >> value;
         if (searchMatrix(value))
         {
-            cout << "Phone number already exists!\nPLease try again with different number\n";
+            cout << "Data with this Phone Number already exists! Try again with different number!\n"
+                 << endl;
             return;
         }
-
-        cout << "Name: ";
-        cin >> value.name;
-        cout << "Address: ";
-        cin >> value.address;
-        cout << "Email: ";
-        cin >> value.email;
 
         cout << "Enter index to add on: ";
         cin >> index;
@@ -232,11 +288,7 @@ public:
         while (ptrTemp != NULL)
         {
             if (found)
-            {
-                Data temp2 = ptrTemp->userData;
-                ptrTemp->userData = temp;
-                temp = temp2;
-            }
+                swapData(ptrTemp->userData, temp);
 
             if (ptrTemp->index == index)
             {
@@ -305,9 +357,7 @@ public:
             }
 
             // cout << "Swapping " << ptrTemp->userData << " and " << temp;
-            Data temp2 = ptrTemp->userData;
-            ptrTemp->userData = temp;
-            temp = temp2;
+            swapData(ptrTemp->userData, temp);
 
             if (ptrTemp->index % matColumns == 0)
             {
@@ -328,6 +378,21 @@ public:
     }
 
     /**
+     * @brief Displays data of node
+     *
+     * @param temp node to display data of
+     */
+    void displayNode(node *temp)
+    {
+        cout << "Node Data:" << endl
+             << "Phone Number:\t" << temp->userData.phoneNumber << endl
+             << "Name:\t\t" << temp->userData.name << endl
+             << "Address:\t\t" << temp->userData.address << endl
+             << "Email:\t\t" << temp->userData.email << endl
+             << endl;
+    }
+
+    /**
      * @brief Function to print all nodes of matrix
      *
      */
@@ -345,12 +410,7 @@ public:
 
         while (temp != NULL)
         {
-            cout << "Node Data:" << endl
-                 << "Phone Number:\t" << temp->userData.phoneNumber << endl
-                 << "Name:\t\t" << temp->userData.name << endl
-                 << "Address:\t\t" << temp->userData.address << endl
-                 << "Email:\t\t" << temp->userData.email << endl
-                 << endl;
+            displayNode(temp);
 
             if ((temp->index + 1) % matColumns == 0 && temp->index > 0)
             {
@@ -370,18 +430,10 @@ public:
 
         cout << endl
              << endl
-             << "First Node Data:" << endl
-             << "Phone Number:\t" << temp->userData.phoneNumber << endl
-             << "Name:\t\t" << temp->userData.name << endl
-             << "Address:\t\t" << temp->userData.address << endl
-             << "Email:\t\t" << temp->userData.email << endl
-             << endl
-             << "Last Node Data:" << endl
-             << "Phone Number:\t" << temp->userData.phoneNumber << endl
-             << "Name:\t\t" << temp->userData.name << endl
-             << "Address:\t\t" << temp->userData.address << endl
-             << "Email:\t\t" << temp->userData.email << endl
-             << endl;
+             << "First Node Data:";
+        displayNode(first);
+        cout << "Last Node Data:" << endl;
+        displayNode(last);
 
         return;
     }
@@ -398,23 +450,14 @@ public:
         if ((first->userData.address == searchData.address) || (first->userData.email == searchData.email) || (first->userData.name == searchData.name) || (first->userData.phoneNumber == searchData.phoneNumber))
         {
             cout << "Found at index 0!" << endl
-                 << "Node Data:" << endl
-                 << "Phone Number:\t" << first->userData.phoneNumber << endl
-                 << "Name:\t\t" << first->userData.name << endl
-                 << "Address:\t\t" << first->userData.address << endl
-                 << "Email:\t\t" << first->userData.email << endl
-                 << endl;
+                 << "Node Data:" << endl;
+            displayNode(first);
             return true;
         }
         else if ((last->userData.address == searchData.address) || (last->userData.email == searchData.email) || (last->userData.name == searchData.name) || (last->userData.phoneNumber == searchData.phoneNumber))
         {
-            cout << "Found at index 15!" << endl
-                 << "Node Data:" << endl
-                 << "Phone Number:\t" << last->userData.phoneNumber << endl
-                 << "Name:\t\t" << last->userData.name << endl
-                 << "Address:\t\t" << last->userData.address << endl
-                 << "Email:\t\t" << last->userData.email << endl
-                 << endl;
+            cout << "Found at index 15!" << endl;
+            displayNode(last);
             return true;
         }
 
@@ -425,12 +468,8 @@ public:
 
             {
                 cout << "Found at index " << ptrTemp->index << "!" << endl
-                     << "Node Data:" << endl
-                     << "Phone Number:\t" << last->userData.phoneNumber << endl
-                     << "Name:\t\t" << last->userData.name << endl
-                     << "Address:\t\t" << last->userData.address << endl
-                     << "Email:\t\t" << last->userData.email << endl
-                     << endl;
+                     << "Node Data:" << endl;
+                displayNode(ptrTemp);
                 return true;
             }
 
