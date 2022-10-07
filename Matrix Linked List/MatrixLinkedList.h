@@ -51,7 +51,7 @@ istream &operator>>(istream &input, Data &data)
          << "Currently: " << data.phoneNumber << "," << data.name << "," << data.address << endl
          << endl;
 
-    cout << "Use email? (y/n): ";
+    cout << "Use email? (y/n): "; // Ask user if they want to enter email
     char choice;
     // cin.ignore();
     cin >> choice;
@@ -94,9 +94,9 @@ private:
      */
     struct node
     {
-        Data userData;
-        node *up, *down, *left, *right;
-        int index;
+        Data userData;                  // Data structure object
+        node *up, *down, *left, *right; // 4-Directional pointers
+        int index;                      // Index of current node
     };
 
     node *first, *last;   // Pointers to first and last nodes of the matrix
@@ -181,7 +181,6 @@ public:
             return;
         }
 
-        node *newNode = new node;
         if (searchMatrix(value))
         {
             cout << "Data with this Phone Number already exists! Try again with different number!\n"
@@ -189,6 +188,8 @@ public:
             return;
         }
 
+        // Creating a new node and assigning data to it
+        node *newNode = new node;
         newNode->userData = value;
 
         if (isMatrixEmpty())
@@ -213,9 +214,7 @@ public:
             last = temp->down;
 
             last->up = temp;
-            last->down = NULL;
-            last->right = NULL;
-            last->left = NULL;
+            last->down = last->right = last->left = NULL;
             last->index = temp->index + matColumns;
 
             cout << "Added " << last->userData.name << "'s data at index: " << last->index << endl;
@@ -223,12 +222,12 @@ public:
             return;
         }
 
+        // All other columns
         temp->right = newNode;
         last = temp->right;
         last->left = temp;
         last->index = temp->index + 1;
-        last->right = NULL;
-        last->down = NULL;
+        last->right = last->down = NULL;
 
         last->up = NULL;
 
@@ -270,7 +269,7 @@ public:
         cout << "Enter index to add on: ";
         cin >> index;
 
-        if (index == last->index + 1)
+        if (index == last->index + 1) //Node to be added after last node
         {
             addNodeAtEnd(value);
             return;
@@ -285,19 +284,19 @@ public:
         bool found = false;
         Data temp;
 
-        while (ptrTemp != NULL)
+        while (ptrTemp != NULL) //Traversing the list
         {
-            if (found)
+            if (found)  //Swapping if data has been found
                 swapData(ptrTemp->userData, temp);
 
-            if (ptrTemp->index == index)
+            if (ptrTemp->index == index)    //Setting values when data found
             {
                 temp = ptrTemp->userData;
                 ptrTemp->userData = value;
                 found = true;
             }
 
-            if ((ptrTemp->index + 1) % matColumns == 0)
+            if ((ptrTemp->index + 1) % matColumns == 0) //Last column
             {
                 for (int k = 0; k < matColumns - 1; k++)
                     ptrTemp = ptrTemp->left;
@@ -309,7 +308,7 @@ public:
             ptrTemp = ptrTemp->right;
         }
 
-        addNodeAtEnd(temp);
+        addNodeAtEnd(temp); //Adding the bubbled up data as a new node to the end
         return;
     }
 
@@ -341,13 +340,12 @@ public:
             return;
         }
 
-        Data temp = last->userData;
-
+        // Storing the last node's data and deleting it
+        Data temp = last->userData; 
         deleteLast();
 
         node *ptrTemp = last;
-
-        while (ptrTemp != NULL)
+        while (ptrTemp != NULL) //Reverse traversing the list while bubbling down the data
         {
             if (ptrTemp->index == index)
             {
@@ -408,7 +406,7 @@ public:
 
         node *temp = first;
 
-        while (temp != NULL)
+        while (temp != NULL)    //Traversing list and printing all data of relevant node
         {
             displayNode(temp);
 
@@ -443,12 +441,12 @@ public:
      *
      * @param searchData
      * @return true if searchData found
-     * @return false if not found
+     * @return false if searchData not found
      */
     bool searchMatrix(Data searchData)
     {
         node *ptrTemp = first;
-        while (ptrTemp != NULL)
+        while (ptrTemp != NULL) //Traversing until match found
         {
             if ((ptrTemp->userData.address == searchData.address) || (ptrTemp->userData.email == searchData.email) || (ptrTemp->userData.name == searchData.name) || (ptrTemp->userData.phoneNumber == searchData.phoneNumber))
 
@@ -489,7 +487,7 @@ public:
             return;
         }
 
-        while (!isMatrixEmpty())
+        while (!isMatrixEmpty())    //Deleting last nodes until matrix empty
             deleteLast();
 
         return;
