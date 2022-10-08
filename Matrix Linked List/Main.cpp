@@ -130,7 +130,7 @@ void deleteMenu(MatrixLinkedList *matrix)
                 break;
             case 3:
                 system("cls");
-                system("pause");
+                //system("pause");
                 return;
             }
         }
@@ -144,7 +144,7 @@ void deleteMenu(MatrixLinkedList *matrix)
 }
 
 /**
- * @brief Provides scrollable menu for searh-matrix options
+ * @brief Provides scrollable menu for search-matrix options
  *
  * @param matrix Pointer to matrix object
  */
@@ -320,7 +320,7 @@ void mainMenu(MatrixLinkedList *matrix)
                     break;
                 }
                 addMenu(matrix);
-                system("pause");
+                //system("pause");
                 break;
             }
             case 3:
@@ -335,7 +335,7 @@ void mainMenu(MatrixLinkedList *matrix)
                 }
 
                 deleteMenu(matrix);
-                system("pause");
+                //system("pause");
                 break;
             }
             case 4:
@@ -350,7 +350,7 @@ void mainMenu(MatrixLinkedList *matrix)
                 }
 
                 searchMenu(matrix);
-                system("pause");
+                //system("pause");
                 break;
             }
             case 5:

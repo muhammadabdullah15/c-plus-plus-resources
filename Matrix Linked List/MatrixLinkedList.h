@@ -47,9 +47,9 @@ istream &operator>>(istream &input, Data &data)
     // input.ignore();
     getline(input, data.address);
 
-    cout << endl
-         << "Currently: " << data.phoneNumber << "," << data.name << "," << data.address << endl
-         << endl;
+    // cout << endl
+    //      << "Currently: " << data.phoneNumber << "," << data.name << "," << data.address << endl
+    //      << endl;
 
     cout << "Use email? (y/n): "; // Ask user if they want to enter email
     char choice;
@@ -57,7 +57,7 @@ istream &operator>>(istream &input, Data &data)
     cin >> choice;
     if (choice != 'y' && choice != 'Y')
     {
-        data.email = "N/A";
+        data.email = "N/A" + data.phoneNumber;
         return input;
     }
 
@@ -124,7 +124,7 @@ public:
         for (int i = 0; i < numNodes; i++)
         {
             Data temp;
-            cout << "Enter values for node " << i << endl;
+            cout << "\nEnter values for node " << i << endl;
             cin >> temp;
             addNodeAtEnd(temp);
         }
@@ -269,7 +269,7 @@ public:
         cout << "Enter index to add on: ";
         cin >> index;
 
-        if (index == last->index + 1) //Node to be added after last node
+        if (index == last->index + 1) // Node to be added after last node
         {
             addNodeAtEnd(value);
             return;
@@ -284,19 +284,19 @@ public:
         bool found = false;
         Data temp;
 
-        while (ptrTemp != NULL) //Traversing the list
+        while (ptrTemp != NULL) // Traversing the list
         {
-            if (found)  //Swapping if data has been found
+            if (found) // Swapping if data has been found
                 swapData(ptrTemp->userData, temp);
 
-            if (ptrTemp->index == index)    //Setting values when data found
+            if (ptrTemp->index == index) // Setting values when data found
             {
                 temp = ptrTemp->userData;
                 ptrTemp->userData = value;
                 found = true;
             }
 
-            if ((ptrTemp->index + 1) % matColumns == 0) //Last column
+            if ((ptrTemp->index + 1) % matColumns == 0) // Last column
             {
                 for (int k = 0; k < matColumns - 1; k++)
                     ptrTemp = ptrTemp->left;
@@ -308,7 +308,7 @@ public:
             ptrTemp = ptrTemp->right;
         }
 
-        addNodeAtEnd(temp); //Adding the bubbled up data as a new node to the end
+        addNodeAtEnd(temp); // Adding the bubbled up data as a new node to the end
         return;
     }
 
@@ -341,11 +341,11 @@ public:
         }
 
         // Storing the last node's data and deleting it
-        Data temp = last->userData; 
+        Data temp = last->userData;
         deleteLast();
 
         node *ptrTemp = last;
-        while (ptrTemp != NULL) //Reverse traversing the list while bubbling down the data
+        while (ptrTemp != NULL) // Reverse traversing the list while bubbling down the data
         {
             if (ptrTemp->index == index)
             {
@@ -386,7 +386,7 @@ public:
              << "Phone Number:\t" << temp->userData.phoneNumber << endl
              << "Name:\t\t" << temp->userData.name << endl
              << "Address:\t" << temp->userData.address << endl
-             << "Email:\t\t" << temp->userData.email << endl
+             << "Email:\t\t" << (temp->userData.email[1] == '/' ? "N/A" : temp->userData.email) << endl
              << endl;
     }
 
@@ -406,7 +406,7 @@ public:
 
         node *temp = first;
 
-        while (temp != NULL)    //Traversing list and printing all data of relevant node
+        while (temp != NULL) // Traversing list and printing all data of relevant node
         {
             displayNode(temp);
 
@@ -428,9 +428,9 @@ public:
 
         cout << endl
              << endl
-             << "First Node Data:";
+             << "First ";
         displayNode(first);
-        cout << "Last Node Data:" << endl;
+        cout << "Last " << endl;
         displayNode(last);
 
         return;
@@ -446,13 +446,12 @@ public:
     bool searchMatrix(Data searchData)
     {
         node *ptrTemp = first;
-        while (ptrTemp != NULL) //Traversing until match found
+        while (ptrTemp != NULL) // Traversing until match found
         {
             if ((ptrTemp->userData.address == searchData.address) || (ptrTemp->userData.email == searchData.email) || (ptrTemp->userData.name == searchData.name) || (ptrTemp->userData.phoneNumber == searchData.phoneNumber))
 
             {
-                cout << "Found at index " << ptrTemp->index << "!" << endl
-                     << "Node Data:" << endl;
+                cout << "Found at index " << ptrTemp->index << "!" << endl;
                 displayNode(ptrTemp);
                 return true;
             }
@@ -487,7 +486,7 @@ public:
             return;
         }
 
-        while (!isMatrixEmpty())    //Deleting last nodes until matrix empty
+        while (!isMatrixEmpty()) // Deleting last nodes until matrix empty
             deleteLast();
 
         return;
