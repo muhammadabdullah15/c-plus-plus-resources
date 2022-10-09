@@ -181,7 +181,7 @@ public:
             return;
         }
 
-        if (searchMatrix(value))
+        if (searchMatrix(value, 'p'))
         {
             cout << "Data with this Phone Number already exists! Try again with different number!\n"
                  << endl;
@@ -259,7 +259,7 @@ public:
 
         cout << "Enter values for node" << endl;
         cin >> value;
-        if (searchMatrix(value))
+        if (searchMatrix(value, 'p'))
         {
             cout << "Data with this Phone Number already exists! Try again with different number!\n"
                  << endl;
@@ -443,12 +443,12 @@ public:
      * @return true if searchData found
      * @return false if searchData not found
      */
-    bool searchMatrix(Data searchData)
+    bool searchMatrix(Data searchData, char mode)
     {
         node *ptrTemp = first;
         while (ptrTemp != NULL) // Traversing until match found
         {
-            if ((ptrTemp->userData.address == searchData.address) || (ptrTemp->userData.email == searchData.email) || (ptrTemp->userData.name == searchData.name) || (ptrTemp->userData.phoneNumber == searchData.phoneNumber))
+            if ((ptrTemp->userData.address == searchData.address && mode == 'a') || (ptrTemp->userData.email == searchData.email && mode == 'e') || (ptrTemp->userData.name == searchData.name && mode == 'n') || (ptrTemp->userData.phoneNumber == searchData.phoneNumber && mode == 'p'))
 
             {
                 cout << "Found at index " << ptrTemp->index << "!" << endl;

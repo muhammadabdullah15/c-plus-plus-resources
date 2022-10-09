@@ -130,7 +130,7 @@ void deleteMenu(MatrixLinkedList *matrix)
                 break;
             case 3:
                 system("cls");
-                //system("pause");
+                // system("pause");
                 return;
             }
         }
@@ -197,7 +197,7 @@ void searchMenu(MatrixLinkedList *matrix)
                 system("cls");
                 cout << "Enter name to search: ";
                 cin >> searchData.name;
-                if (!matrix->searchMatrix(searchData))
+                if (!matrix->searchMatrix(searchData, 'n'))
                     cout << "User data not found!\n";
                 system("pause");
                 break;
@@ -207,7 +207,7 @@ void searchMenu(MatrixLinkedList *matrix)
                 system("cls");
                 cout << "Enter address to search: ";
                 cin >> searchData.address;
-                if (!matrix->searchMatrix(searchData))
+                if (!matrix->searchMatrix(searchData, 'a'))
                     cout << "User data not found!\n";
                 system("pause");
                 break;
@@ -217,7 +217,7 @@ void searchMenu(MatrixLinkedList *matrix)
                 system("cls");
                 cout << "Enter email to search: ";
                 cin >> searchData.email;
-                if (!matrix->searchMatrix(searchData))
+                if (!matrix->searchMatrix(searchData, 'e'))
                     cout << "User data not found!\n";
                 system("pause");
                 break;
@@ -225,7 +225,7 @@ void searchMenu(MatrixLinkedList *matrix)
             case 4:
             {
                 system("cls");
-                system("pause");
+                // system("pause");
                 return;
             }
             }
@@ -320,7 +320,7 @@ void mainMenu(MatrixLinkedList *matrix)
                     break;
                 }
                 addMenu(matrix);
-                //system("pause");
+                // system("pause");
                 break;
             }
             case 3:
@@ -335,7 +335,7 @@ void mainMenu(MatrixLinkedList *matrix)
                 }
 
                 deleteMenu(matrix);
-                //system("pause");
+                // system("pause");
                 break;
             }
             case 4:
@@ -350,7 +350,7 @@ void mainMenu(MatrixLinkedList *matrix)
                 }
 
                 searchMenu(matrix);
-                //system("pause");
+                // system("pause");
                 break;
             }
             case 5:
