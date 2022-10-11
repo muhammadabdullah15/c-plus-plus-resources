@@ -1,9 +1,10 @@
 /**
  * @file MatrixLinkedList.h
- * @author Muhammad Abdullah
+ * @author Muhammad Abdullah (2021317),Mohammed Umer Tayyab(2021306)
+ *
  * @brief Header file for Matrix Linked List
  * @version 1
- * @date 2022-10-06
+ * @date 2022-10-09
  *
  */
 
@@ -34,7 +35,7 @@ struct Data
 istream &operator>>(istream &input, Data &data)
 {
     cout << "Phone Number:\t";
-    input.ignore();
+    // input.ignore();
     input >> data.phoneNumber;
 
     cout << "Name:\t\t";
@@ -64,6 +65,7 @@ istream &operator>>(istream &input, Data &data)
     cout << "Email:\t\t";
     // input.ignore();
     input >> data.email;
+    input.ignore();
     return input;
 }
 
@@ -430,7 +432,7 @@ public:
              << endl
              << "First ";
         displayNode(first);
-        cout << "Last " << endl;
+        cout << "Last ";
         displayNode(last);
 
         return;

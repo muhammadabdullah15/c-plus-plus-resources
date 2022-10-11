@@ -1,3 +1,13 @@
+/**
+ * @file Main.cpp
+ * @author Muhammad Abdullah (2021317),Mohammed Umer Tayyab(2021306)
+ *
+ * @brief Header file for Matrix Linked List
+ * @version 1
+ * @date 2022-10-09
+ *
+ */
+
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
@@ -196,7 +206,9 @@ void searchMenu(MatrixLinkedList *matrix)
             {
                 system("cls");
                 cout << "Enter name to search: ";
-                cin >> searchData.name;
+                // cin.ignore();
+                getline(cin, searchData.name);
+                // cin >> searchData.name;
                 if (!matrix->searchMatrix(searchData, 'n'))
                     cout << "User data not found!\n";
                 system("pause");
@@ -206,7 +218,9 @@ void searchMenu(MatrixLinkedList *matrix)
             {
                 system("cls");
                 cout << "Enter address to search: ";
-                cin >> searchData.address;
+                // cin.ignore();
+                getline(cin, searchData.address);
+                // cin >> searchData.address;
                 if (!matrix->searchMatrix(searchData, 'a'))
                     cout << "User data not found!\n";
                 system("pause");
