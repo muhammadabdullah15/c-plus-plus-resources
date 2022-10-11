@@ -126,6 +126,53 @@ private:
         return root;
     }
 
+    int getCount(treeNode *root, int low, int high)
+    {
+        // Base case
+        if (!root)
+            return 0;
+
+        // Special Optional case for improving efficiency
+        if (root->value == high && root->value == low)
+            return 1;
+
+        // If current node is in range, then include it in count and recur for left and right children of it
+        if (root->value <= high && root->value >= low)
+            return 1 + getCount(root->left, low, high) +
+                   getCount(root->right, low, high);
+
+        // If current node is smaller than low, then recur for right child
+        else if (root->value < low)
+            return getCount(root->right, low, high);
+
+        // Else recur for left child
+        else
+            return getCount(root->left, low, high);
+    }
+
+    treeNode *kthSmallest(treeNode *root, int &k)
+    {
+        static int count = 0;
+        // base case
+        if (root == NULL)
+            return NULL;
+
+        // search in left subtree
+        treeNode *left = kthSmallest(root->left, k);
+
+        // if k'th smallest is found in left subtree, return it
+        if (left != NULL)
+            return left;
+
+        // if current element is k'th smallest, return it
+        count++;
+        if (count == k)
+            return root;
+
+        // else search in right subtree
+        return kthSmallest(root->right, k);
+    }
+
 public:
     BinaryTree()
     {
@@ -248,6 +295,16 @@ public:
             temp = temp->right;
 
         return (temp->value);
+    }
+
+    int getNodesInRange(int low, int high)
+    {
+        return getCount(root, low, high);
+    }
+
+    int getKthSmallest(int k)
+    {
+        return kthSmallest(root, k)->value;
     }
 };
 
