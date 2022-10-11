@@ -35,26 +35,17 @@ struct Data
 istream &operator>>(istream &input, Data &data)
 {
     cout << "Phone Number:\t";
-    // input.ignore();
     input >> data.phoneNumber;
 
     cout << "Name:\t\t";
-    // input >> data.name;
     input.ignore();
     getline(input, data.name);
 
     cout << "Address:\t";
-    // input >> data.address;
-    // input.ignore();
     getline(input, data.address);
-
-    // cout << endl
-    //      << "Currently: " << data.phoneNumber << "," << data.name << "," << data.address << endl
-    //      << endl;
 
     cout << "Use email? (y/n): "; // Ask user if they want to enter email
     char choice;
-    // cin.ignore();
     cin >> choice;
     if (choice != 'y' && choice != 'Y')
     {
@@ -63,7 +54,6 @@ istream &operator>>(istream &input, Data &data)
     }
 
     cout << "Email:\t\t";
-    // input.ignore();
     input >> data.email;
     input.ignore();
     return input;
@@ -356,7 +346,6 @@ public:
                 return;
             }
 
-            // cout << "Swapping " << ptrTemp->userData << " and " << temp;
             swapData(ptrTemp->userData, temp);
 
             if (ptrTemp->index % matColumns == 0)
@@ -471,8 +460,6 @@ public:
             }
             ptrTemp = ptrTemp->right;
         }
-
-        // cout << "User Data not found!\n";
         return false;
     }
 
@@ -501,7 +488,10 @@ public:
     void deleteLast()
     {
         if (isMatrixEmpty())
+        {
             cout << "Matrix empty!" << endl;
+            return;
+        }
 
         cout << "Deleted: " << last->userData.phoneNumber << "'s data" << endl;
 
@@ -526,23 +516,8 @@ public:
         }
 
         temp = last->left;
-        // if (temp->right->right != NULL)
-        // {
-        //     temp->right->right->left = NULL;
-        //     temp->right->right = NULL;
-        // }
-
-        // if (temp->up != NULL)
-        // {
-        //     temp->right->up->down = NULL;
-        //     temp->right->up = NULL;
-        // }
-
-        // temp->right->left = NULL;
         temp->right = NULL;
-
         last = temp;
-        // temp->right = NULL;
         last->index = temp->index;
 
         return;
