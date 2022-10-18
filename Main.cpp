@@ -30,11 +30,39 @@ bool hasHigherPrecedence(string a, char b)
     return false;
 }
 
-bool isOperation(char op)
+bool isOperator(char op)
 {
     if (op == '+' || op == '-' || op == '*' || op == '/' || op == '^' || op == '$')
         return true;
     return false;
+}
+
+bool isOpeningBracket(char br)
+{
+    if (br == '(' || br == '{' || br == '[')
+        return true;
+    return false;
+}
+
+bool isOpeningBracket(string br)
+{
+    if (br == "(" || br == "{" || br == "[")
+        return true;
+    return false;
+}
+
+bool isClosingBracket(char br)
+{
+    if (br == ')' || br == '}' || br == ']')
+        return true;
+    return false;
+}
+
+bool isBracket(char br)
+{
+    if (!isClosingBracket(br) && !isOpeningBracket(br))
+        return false;
+    return true;
 }
 
 string infixToPostfix(string infix)
@@ -46,23 +74,23 @@ string infixToPostfix(string infix)
     {
         if (infix[i] == ' ')
             continue;
-        else if (infix[i] == '+' || infix[i] == '-' || infix[i] == '*' || infix[i] == '/')
+        else if (isOperator(infix[i]))
         {
-            while (!s.isEmpty() && hasHigherPrecedence(s.peek(), infix[i]) && s.peek() != "(")
+            while (!s.isEmpty() && hasHigherPrecedence(s.peek(), infix[i]) && !isOpeningBracket(s.peek()))
                 postfix += s.pop() + ' ';
             string temp;
             temp += infix[i];
             s.push(temp);
         }
-        else if (infix[i] == '(')
+        else if (isOpeningBracket(infix[i]))
         {
             string temp;
             temp += infix[i];
             s.push(temp);
         }
-        else if (infix[i] == ')')
+        else if (isClosingBracket(infix[i]))
         {
-            while (!s.isEmpty() && s.peek() != "(")
+            while (!s.isEmpty() && !isOpeningBracket(s.peek()))
                 postfix += s.pop();
             s.pop();
         }
@@ -76,6 +104,7 @@ string infixToPostfix(string infix)
     }
 
     postfix += ' ';
+    // Infix:          12 + 3 * 8 * ( 3 / 4 - 2)
 
     while (!s.isEmpty())
     {
@@ -115,7 +144,7 @@ float postfixEvaluator(string postfix)
         else
         {
             string a;
-            for (; postfix[i] != ' ' && postfix[i] != '\0'; i++)
+            for (; postfix[i] != ' ' && postfix[i] != '\0' && !isOperator(postfix[i]); i++)
                 a += postfix[i];
             s.push(stoi(a));
         }
@@ -123,15 +152,40 @@ float postfixEvaluator(string postfix)
     return s.peek();
 }
 
+string fixInput(string input)
+{
+    string postfix;
+    for (int i = 0; input[i] != '\0'; i++)
+    {
+        if (input[i] == ' ')
+            continue;
+        if (isOperator(input[i]) || isBracket(input[i]))
+        {
+            if (!isOpeningBracket(input[i]))
+                postfix += ' ';
+            postfix += input[i];
+            postfix += ' ';
+            continue;
+        }
+        postfix += input[i];
+    }
+
+    return postfix;
+}
+
 int main()
 {
-    string infix = "12.3 + 3 * 8 * ( 3 / 4 - 2 )";
-    string postfix = infixToPostfix(infix);
-    float answer = postfixEvaluator(postfix);
+    cout << "TEST: " << (isClosingBracket(')') ? "yes" : "no") << endl;
+    string infix = "12.3+3*8*(3/4-  2)"; // INPUT
 
-    cout << "Infix:\t\t" << infix << endl
-         << "Postfix:\t" << postfix << endl
-         << "Answer:\t\t" << answer << endl;
+    infix = fixInput(infix);
+    cout << "Infix:\t\t" << infix << endl;
+
+    string postfix = infixToPostfix(infix);
+    cout << "Postfix:\t" << postfix << endl;
+
+    float answer = postfixEvaluator(postfix);
+    cout << "Answer:\t\t" << answer << endl;
 
     return 0;
 }
