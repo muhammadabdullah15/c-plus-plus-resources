@@ -1,10 +1,59 @@
 #include <iostream>
 #include <string>
-#include "Stack.h"
+#include <math.h>
+#include <stdlib.h>
+#include "StackArray.h"
+#include <cstdlib>
 
-//^,%, stack array
+void clear_screen()
+{
+#ifdef WINDOWS
+    std::system("cls");
+#else
+    std::system("clear");
+#endif
+}
+//^,%
+// sudo apt - get purge google - chrome - stable
+// rm ~/.config/google-chrome/ -rf
 
 using namespace std;
+
+void add(float op1, float op2, Stack<float> &s)
+{
+    s.push(op1 + op2);
+    return;
+}
+
+void subtract(float op1, float op2, Stack<float> &s)
+{
+    s.push(op2 - op1);
+    return;
+}
+
+void multiply(float op1, float op2, Stack<float> &s)
+{
+    s.push(op1 * op2);
+    return;
+}
+
+void divide(float op1, float op2, Stack<float> &s)
+{
+    s.push(op2 / op1);
+    return;
+}
+
+void power(float op1, float op2, Stack<float> &s)
+{
+    s.push(pow(op2, op1));
+    return;
+}
+
+void modulus_t(float op1, float op2, Stack<float> &s)
+{
+    s.push((int)op2 % (int)op1);
+    return;
+}
 
 bool hasHigherPrecedence(char a, char b)
 {
@@ -32,7 +81,7 @@ bool hasHigherPrecedence(char a, char b)
 
 bool isOperator(char op)
 {
-    if (op == '+' || op == '-' || op == '*' || op == '/' || op == '^' || op == '$')
+    if (op == '+' || op == '-' || op == '*' || op == '/' || op == '^' || op == '%')
         return true;
     return false;
 }
@@ -40,13 +89,6 @@ bool isOperator(char op)
 bool isOpeningBracket(char br)
 {
     if (br == '(' || br == '{' || br == '[')
-        return true;
-    return false;
-}
-
-bool isOpeningBracket(string br)
-{
-    if (br == "(" || br == "{" || br == "[")
         return true;
     return false;
 }
@@ -76,12 +118,13 @@ string fixInput(string input, int &size)
         {
             if (!isOpeningBracket(input[i]))
             {
-                // cout << "Incremented size when char=" << input[i] << endl;
                 size++;
                 postfix += ' ';
             }
+
             if (isClosingBracket(input[i]))
                 size--;
+
             postfix += input[i];
             postfix += ' ';
             continue;
@@ -89,6 +132,7 @@ string fixInput(string input, int &size)
         postfix += input[i];
     }
     size++;
+    cout << postfix << "<-" << size << endl;
     return postfix;
 }
 
@@ -106,13 +150,17 @@ void postfixEvaluator(string postfix, int stackSize)
             float operand2 = s.pop();
 
             if (postfix[i] == '+')
-                s.push(operand1 + operand2);
+                add(operand1, operand2, s);
             else if (postfix[i] == '-')
-                s.push(operand2 - operand1);
+                subtract(operand1, operand2, s);
             else if (postfix[i] == '*')
-                s.push(operand1 * operand2);
+                multiply(operand1, operand2, s);
             else if (postfix[i] == '/')
-                s.push(operand2 / operand1);
+                divide(operand1, operand2, s);
+            else if (postfix[i] == '^')
+                power(operand1, operand2, s);
+            else if (postfix[i] == '%')
+                modulus_t(operand1, operand2, s);
         }
         else
         {
@@ -181,7 +229,19 @@ void infixToPostfix(string infix)
 
 int main()
 {
-    string infix = "12.3+3*8*(3/4-2)"; // INPUT
-    infixToPostfix(infix);
+    // string infix = "12.3+3*8*(3/4-2)"; // INPUT
+    while (true)
+    {
+        string infix;
+        clear_screen();
+        cout << "Enter Infix expression (or 0 to exit): ";
+        getline(cin, infix);
+        if (infix == "0")
+            break;
+        clear_screen();
+        infixToPostfix(infix);
+        cout << "Press any key to continue\n";
+        getchar();
+    }
     return 0;
 }
