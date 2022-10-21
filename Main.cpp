@@ -6,6 +6,8 @@
 #include <cstdlib>
 using namespace std;
 
+// check operations=operands- 1
+
 /**
  * @brief Clears the terminal
  *
@@ -18,7 +20,6 @@ void clear_screen()
     std::system("clear");
 #endif
 }
-// check operations=operands- 1
 
 /**
  * @brief Adds two operands and pushes result onto the stack
@@ -209,7 +210,7 @@ bool isBracket(char br)
  */
 string fixInput(string input, int &size)
 {
-    int brackets = 0;
+    int brackets = 0, operators = 0, operands = 0;
     string postfix;
     for (int i = 0; input[i] != '\0'; i++)
     {
@@ -223,10 +224,11 @@ string fixInput(string input, int &size)
                 postfix += ' ';
             }
 
-            if (isOpeningBracket(input[i]))
+            if (isOperator(input[i]))
+                operators++;
+            else if (isOpeningBracket(input[i]))
                 brackets++;
-
-            if (isClosingBracket(input[i]))
+            else if (isClosingBracket(input[i]))
             {
                 brackets--;
                 size--;
@@ -238,12 +240,20 @@ string fixInput(string input, int &size)
         }
         if (!isDigit(input[i]))
             return "numeralError";
+
+        operands++;
+        if (i > 0 && isDigit(input[i - 1]))
+            operands--;
+
         postfix += input[i];
     }
     size++;
 
     if (brackets != 0)
         return "bracketError";
+
+    if (operands != operators + 1)
+        return "operatorError";
 
     return postfix;
 }
@@ -310,6 +320,11 @@ void infixToPostfix(string infix)
     else if (infix == "numeralError")
     {
         cout << "Expression error!\nOperands must be numbers!\n";
+        return;
+    }
+    else if (infix == "operatorError")
+    {
+        cout << "Expression error!\nOperands must be 1 more than operators!\n";
         return;
     }
 
