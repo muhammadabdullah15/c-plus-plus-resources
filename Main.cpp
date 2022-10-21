@@ -4,7 +4,12 @@
 #include <stdlib.h>
 #include "StackArray.h"
 #include <cstdlib>
+using namespace std;
 
+/**
+ * @brief Clears the terminal
+ *
+ */
 void clear_screen()
 {
 #ifdef WINDOWS
@@ -13,48 +18,94 @@ void clear_screen()
     std::system("clear");
 #endif
 }
-//^,%
-// sudo apt - get purge google - chrome - stable
-// rm ~/.config/google-chrome/ -rf
+// check operations=operands- 1
 
-using namespace std;
-
+/**
+ * @brief Adds two operands and pushes result onto the stack
+ *
+ * @param op1   Operand 1
+ * @param op2   Operand 2
+ * @param s     Stack
+ */
 void add(float op1, float op2, Stack<float> &s)
 {
     s.push(op1 + op2);
     return;
 }
 
+/**
+ * @brief Subtracts two operands and pushes result onto the stack
+ *
+ * @param op1   Operand 1
+ * @param op2   Operand 2
+ * @param s     Stack
+ */
 void subtract(float op1, float op2, Stack<float> &s)
 {
     s.push(op2 - op1);
     return;
 }
 
+/**
+ * @brief Multiplies two operands and pushes result onto the stack
+ *
+ * @param op1   Operand 1
+ * @param op2   Operand 2
+ * @param s     Stack
+ */
 void multiply(float op1, float op2, Stack<float> &s)
 {
     s.push(op1 * op2);
     return;
 }
 
+/**
+ * @brief Divides two operands and pushes result onto the stack
+ *
+ * @param op1   Operand 1
+ * @param op2   Operand 2
+ * @param s     Stack
+ */
 void divide(float op1, float op2, Stack<float> &s)
 {
     s.push(op2 / op1);
     return;
 }
 
+/**
+ * @brief Raises operand to the power of other operand pushes result onto the stack
+ *
+ * @param op1   Operand 1
+ * @param op2   Operand 2
+ * @param s     Stack
+ */
 void power(float op1, float op2, Stack<float> &s)
 {
     s.push(pow(op2, op1));
     return;
 }
 
+/**
+ * @brief Calculates modulus pushes result onto the stack
+ *
+ * @param op1   Operand 1
+ * @param op2   Operand 2
+ * @param s     Stack
+ */
 void modulus_t(float op1, float op2, Stack<float> &s)
 {
     s.push((int)op2 % (int)op1);
     return;
 }
 
+/**
+ * @brief Checks precedence level of two passed operators
+ *
+ * @param a Operator 1
+ * @param b Operator 2
+ * @return true if operator1 has higher precedence
+ * @return false if operator2 has higher precedence
+ */
 bool hasHigherPrecedence(char a, char b)
 {
     int a_prec, b_prec;
@@ -79,6 +130,27 @@ bool hasHigherPrecedence(char a, char b)
     return false;
 }
 
+/**
+ * @brief Checks if passed character is a digit/decimal
+ *
+ * @param a Character to check
+ * @return true if a is digit/decimal
+ * @return false of a is not a digit/decimal
+ */
+bool isDigit(char a)
+{
+    if ((((int)a - ((int)'0') >= 0) && ((int)a - ((int)'0') <= 9)) || a == '.')
+        return true;
+    return false;
+}
+
+/**
+ * @brief Checks if passed character is an operator
+ *
+ * @param op    Character to check
+ * @return true if op is an operator
+ * @return false if op is not an operator
+ */
 bool isOperator(char op)
 {
     if (op == '+' || op == '-' || op == '*' || op == '/' || op == '^' || op == '%')
@@ -86,6 +158,13 @@ bool isOperator(char op)
     return false;
 }
 
+/**
+ * @brief Checks if passed character is an opening bracket
+ *
+ * @param br    Character to check
+ * @return true if br is an opening bracket
+ * @return false if br is not an opening bracket
+ */
 bool isOpeningBracket(char br)
 {
     if (br == '(' || br == '{' || br == '[')
@@ -93,6 +172,13 @@ bool isOpeningBracket(char br)
     return false;
 }
 
+/**
+ * @brief Checks if passed character is a closing bracket
+ *
+ * @param br Character to check
+ * @return true if br is a closing bracket
+ * @return false if br is not a closing bracket
+ */
 bool isClosingBracket(char br)
 {
     if (br == ')' || br == '}' || br == ']')
@@ -100,6 +186,13 @@ bool isClosingBracket(char br)
     return false;
 }
 
+/**
+ * @brief Checks if passed character is a bracket
+ *
+ * @param br Character to check
+ * @return true if br is a bracket
+ * @return false if br is not a bracket
+ */
 bool isBracket(char br)
 {
     if (!isClosingBracket(br) && !isOpeningBracket(br))
@@ -107,8 +200,16 @@ bool isBracket(char br)
     return true;
 }
 
+/**
+ * @brief Fixes & error-handles the user input
+ *
+ * @param input //User input
+ * @param size //Passed reference to the size of the stack array
+ * @return string Properly formatted and error checked string
+ */
 string fixInput(string input, int &size)
 {
+    int brackets = 0;
     string postfix;
     for (int i = 0; input[i] != '\0'; i++)
     {
@@ -122,20 +223,37 @@ string fixInput(string input, int &size)
                 postfix += ' ';
             }
 
+            if (isOpeningBracket(input[i]))
+                brackets++;
+
             if (isClosingBracket(input[i]))
+            {
+                brackets--;
                 size--;
+            }
 
             postfix += input[i];
             postfix += ' ';
             continue;
         }
+        if (!isDigit(input[i]))
+            return "numeralError";
         postfix += input[i];
     }
     size++;
-    cout << postfix << "<-" << size << endl;
+
+    if (brackets != 0)
+        return "bracketError";
+
     return postfix;
 }
 
+/**
+ * @brief Evaluates the postfix expression
+ *
+ * @param postfix   Postfix expression
+ * @param stackSize Size of the stack
+ */
 void postfixEvaluator(string postfix, int stackSize)
 {
     Stack<float> s(stackSize);
@@ -174,11 +292,36 @@ void postfixEvaluator(string postfix, int stackSize)
     cout << "Answer:\t\t" << s.peek() << endl;
 }
 
+/**
+ * @brief Converts user-inputted infix string to postfix
+ *
+ * @param infix //User-input infix string
+ */
 void infixToPostfix(string infix)
 {
     int stackSize = 0;
     infix = fixInput(infix, stackSize);
+
+    if (infix == "bracketError")
+    {
+        cout << "Expression error!\nBrackets opened must be equal to brackets closed!\n";
+        return;
+    }
+    else if (infix == "numeralError")
+    {
+        cout << "Expression error!\nOperands must be numbers!\n";
+        return;
+    }
+
     cout << "Infix:\t\t" << infix << endl;
+    // cout << "Size" << stackSize << endl;
+
+    if (stackSize == 1)
+    {
+        cout << "Postfix:\t" << infix << endl
+             << "Answer:\t\t" << infix << endl;
+        return;
+    }
 
     string postfix;
     Stack<char> s(stackSize);
@@ -227,9 +370,14 @@ void infixToPostfix(string infix)
     return;
 }
 
+/**
+ * @brief Driver code
+ *
+ * @return int Errors (if any)
+ */
 int main()
 {
-    // string infix = "12.3+3*8*(3/4-2)"; // INPUT
+    // string infix = "1+3*8*(3/4-2)"; // INPUT
     while (true)
     {
         string infix;
