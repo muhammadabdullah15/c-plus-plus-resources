@@ -30,6 +30,14 @@ void clear_screen()
 #endif
 }
 
+void pause()
+{
+    cout << "Press any key to continue\n";
+    cin.ignore();
+    // getchar();
+    return;
+}
+
 /**
  * @brief Adds two operands and pushes result onto the stack
  *
@@ -338,7 +346,6 @@ void infixToPostfix(string infix)
     }
 
     cout << "Infix:\t\t" << infix << endl;
-    // cout << "Size" << stackSize << endl;
 
     if (stackSize == 1)
     {
@@ -364,7 +371,6 @@ void infixToPostfix(string infix)
             s.push(infix[i]);
         }
         else if (isOpeningBracket(infix[i]))
-
             s.push(infix[i]);
         else if (isClosingBracket(infix[i]))
         {
@@ -379,12 +385,17 @@ void infixToPostfix(string infix)
 
             postfix += ' ';
         }
+
+        if (infix[i] == '\0')
+            break;
     }
 
     postfix += ' ';
 
     while (!s.isEmpty())
     {
+        if (s.peek() == ' ')
+            break;
         postfix += s.pop();
         postfix += ' ';
     }
@@ -401,7 +412,7 @@ void infixToPostfix(string infix)
  */
 int main()
 {
-    // string infix = "1+3*8*(3/4-2)"; // INPUT
+    // string infix = "12+3*8*(3/4-2)"; // INPUT
     while (true)
     {
         string infix;
@@ -412,8 +423,7 @@ int main()
             break;
         clear_screen();
         infixToPostfix(infix);
-        cout << "Press any key to continue\n";
-        getchar();
+        pause();
     }
     return 0;
 }
