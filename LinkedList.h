@@ -125,17 +125,30 @@ public:
             return;
         }
 
-        node *newNode = new node, *temp = head;
+        node *newNode = new node, *temp = headNode;
         newNode->value = val;
 
         while (temp != NULL)
         {
-            if (val > temp->value && val < temp->next->value)
+            if (temp->next == NULL)
             {
-                newNode->next = temp->next;
-                temp->next = newNode;
+                insertAtTail(val);
                 return;
             }
+            if (val > temp->value && val < temp->next->value)
+            {
+                newNode->prev = temp;
+                newNode->next = temp->next;
+                temp->next = newNode;
+                newNode->next->prev = newNode;
+                return;
+            }
+            if (val == temp->value)
+            {
+                cout << "Duplicate/n";
+                return;
+            }
+            temp = temp->next;
         }
     }
 
