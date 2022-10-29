@@ -12,6 +12,7 @@ private:
         node *prev;
     };
     node *headNode, *tailNode;
+
     void reverseDisplayList(node *head)
     {
         if (head == NULL)
@@ -147,6 +148,26 @@ public:
             {
                 cout << "Duplicate/n";
                 return;
+            }
+            temp = temp->next;
+        }
+    }
+
+    void BubbleSort()
+    {
+        node *temp = headNode;
+        while (temp != NULL)
+        {
+            node *current = headNode;
+            while (current != NULL)
+            {
+                if (current->value > temp->value)
+                {
+                    int temp = current->value;
+                    current->value = temp->value;
+                    temp->value = temp;
+                }
+                current = current->next;
             }
             temp = temp->next;
         }
