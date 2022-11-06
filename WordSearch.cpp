@@ -124,7 +124,7 @@ private:
     void writeResult(string word, unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol)
     {
         writeFile.open(WritePath, ios_base::out | ios_base::app);
-        writeFile << word << "\t(" << startRow << "," << startCol << ") (" << endRow << "," << endCol << ")" << endl;
+        writeFile << word << " (" << startRow << "," << startCol << ") (" << endRow << "," << endCol << ")" << endl;
         cout << word << "\t(" << startRow << "," << startCol << ") (" << endRow << "," << endCol << ")" << endl;
         writeFile.close();
     }
@@ -134,8 +134,10 @@ private:
         string temp;
         for (int i = 0; i < array.rowCount; i++)
         {
+            // FORWARD HORIZONTAL
             for (int j = 0; j < array.columns; j++)
             {
+                // FORWARD HORIZONTAL
                 temp = "";
                 for (int k = j; k < array.columns; k++)
                 {
@@ -143,23 +145,14 @@ private:
                     if (dictionary.searchTrie(temp))
                         writeResult(temp, i + 1, j + 1, i + 1, j + temp.length());
                 }
-            }
-        }
-    }
 
-    void horizontalReverse(Array2D array)
-    {
-        string temp;
-        for (int i = 0; i < array.rowCount; i++)
-        {
-            for (int j = 0; j < array.columns; j++)
-            {
+                // BACKWARD HORIZONTAL
                 temp = "";
-                for (int k = array.columns - j - 1; k >= 0; k--)
+                for (int l = array.columns - j - 1; l >= 0; l--)
                 {
-                    temp += array.arr[i][k];
+                    temp += array.arr[i][l];
                     if (dictionary.searchTrie(temp))
-                        writeResult(temp, i + 1, k + temp.length(), i + 1, k + 1);
+                        writeResult(temp, i + 1, l + temp.length(), i + 1, l + 1);
                 }
             }
         }
@@ -172,6 +165,7 @@ private:
         {
             for (int j = 0; j < array.rowCount; j++)
             {
+                // FORWARD VERTICAL
                 temp = "";
                 for (int k = j; k < array.rowCount; k++)
                 {
@@ -179,31 +173,43 @@ private:
                     if (dictionary.searchTrie(temp))
                         writeResult(temp, j + 1, i + 1, j + 1, i + temp.length());
                 }
-            }
-        }
-    }
 
-    void verticalReverse(Array2D array)
-    {
-        string temp;
-        for (int i = 0; i < array.columns; i++)
-        {
-            for (int j = 0; j < array.rowCount; j++)
-            {
+                // BACKWARD VERTICAL
                 temp = "";
-                for (int k = array.rowCount - j - 1; k >= 0; k--)
+                for (int l = array.rowCount - j - 1; l >= 0; l--)
                 {
-                    temp += array.arr[k][i];
+                    temp += array.arr[l][i];
                     if (dictionary.searchTrie(temp))
-                        writeResult(temp, k + temp.length(), i + 1, k + 1, i + 1);
-
-                    // writeResult(temp, k + 1, i + 1, k + 1, i + temp.length());
+                        writeResult(temp, l + temp.length(), i + 1, l + 1, i + 1);
                 }
             }
         }
     }
 
-    void diagonal(Array2D array) {}
+    void diagonal(Array2D array)
+    {
+        string temp;
+        for (int i = 0; i < array.rowCount; i++)
+        {
+            for (int j = 0; j < array.columns; j++)
+            {
+                // FORWARD DIAGONAL
+                temp = "";
+                for (int k = i; k < array.rowCount; k++)
+                {
+                    for (int l = j; l < array.columns; l++)
+                    {
+                        if (k - i == l - j)
+                        {
+                            temp += array.arr[k][l];
+                            if (dictionary.searchTrie(temp))
+                                writeResult(temp, i + 1, j + 1, i + temp.length(), j + temp.length());
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     void diagonalReverse(Array2D array) {}
 
@@ -219,14 +225,10 @@ public:
         writeFile.open(WritePath);
         writeFile.close();
 
-        horizontal(array);
-        cout << endl;
-        horizontalReverse(array);
-        cout << endl;
-        vertical(array);
-        cout << endl;
-        verticalReverse(array);
-        cout << endl;
+        // horizontal(array);
+        // cout << endl;
+        // vertical(array);
+        // cout << endl;
         diagonal(array);
         cout << endl;
         diagonalReverse(array);
