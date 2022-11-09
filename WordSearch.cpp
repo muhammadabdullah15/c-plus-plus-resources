@@ -193,25 +193,44 @@ private:
         {
             for (int j = 0; j < array.columns; j++)
             {
-                // FORWARD DIAGONAL
+                // UPPER LEFT DIAGONAL
                 temp = "";
-                for (int k = i; k < array.rowCount; k++)
+                for (int k = i, l = j; k >= 0 && l >= 0; k--, l--)
                 {
-                    for (int l = j; l < array.columns; l++)
-                    {
-                        if (k - i == l - j)
-                        {
-                            temp += array.arr[k][l];
-                            if (dictionary.searchTrie(temp))
-                                writeResult(temp, i + 1, j + 1, i + temp.length(), j + temp.length());
-                        }
-                    }
+                    temp += array.arr[k][l];
+                    if (dictionary.searchTrie(temp))
+                        writeResult(temp, i + 1, j + 1, i - temp.length() + 2, j - temp.length() + 2);
+                }
+
+                // UPPER RIGHT DIAGONAL
+                temp = "";
+                for (int k = i, l = j; k >= 0 && l < array.columns; k--, l++)
+                {
+                    temp += array.arr[k][l];
+                    if (dictionary.searchTrie(temp))
+                        writeResult(temp, i + 1, j + 1, i - temp.length() + 2, j + temp.length());
+                }
+
+                // LOWER LEFT DIAGONAL
+                temp = "";
+                for (int k = i, l = j; k < array.rowCount && l >= 0; k++, l--)
+                {
+                    temp += array.arr[k][l];
+                    if (dictionary.searchTrie(temp))
+                        writeResult(temp, i + 1, j + 1, i + temp.length(), j - temp.length() + 2);
+                }
+
+                // LOWER RIGHT DIAGONAL
+                temp = "";
+                for (int k = i, l = j; k < array.rowCount && l < array.columns; k++, l++)
+                {
+                    temp += array.arr[k][l];
+                    if (dictionary.searchTrie(temp))
+                        writeResult(temp, i + 1, j + 1, i + temp.length(), j + temp.length());
                 }
             }
         }
     }
-
-    void diagonalReverse(Array2D array) {}
 
 public:
     WordSearch()
@@ -225,14 +244,11 @@ public:
         writeFile.open(WritePath);
         writeFile.close();
 
-        // horizontal(array);
+        horizontal(array);
         // cout << endl;
-        // vertical(array);
+        vertical(array);
         // cout << endl;
         diagonal(array);
-        cout << endl;
-        diagonalReverse(array);
-        cout << endl;
     }
 };
 
