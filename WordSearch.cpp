@@ -129,106 +129,89 @@ private:
         writeFile.close();
     }
 
-    void horizontal(Array2D array)
+    void horizontal(Array2D array, int i, int j)
     {
         string temp;
-        for (int i = 0; i < array.rowCount; i++)
-        {
-            // FORWARD HORIZONTAL
-            for (int j = 0; j < array.columns; j++)
-            {
-                // FORWARD HORIZONTAL
-                temp = "";
-                for (int k = j; k < array.columns; k++)
-                {
-                    temp += array.arr[i][k];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, i + 1, j + 1, i + 1, j + temp.length());
-                }
 
-                // BACKWARD HORIZONTAL
-                temp = "";
-                for (int l = array.columns - j - 1; l >= 0; l--)
-                {
-                    temp += array.arr[i][l];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, i + 1, l + temp.length(), i + 1, l + 1);
-                }
-            }
+        // FORWARD HORIZONTAL
+        temp = "";
+        for (int k = j; k < array.columns; k++)
+        {
+            temp += array.arr[i][k];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, j + 1, i + 1, j + temp.length());
+        }
+
+        // BACKWARD HORIZONTAL
+        temp = "";
+        for (int l = array.columns - j - 1; l >= 0; l--)
+        {
+            temp += array.arr[i][l];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, l + temp.length(), i + 1, l + 1);
         }
     }
 
-    void vertical(Array2D array)
+    void vertical(Array2D array, int i, int j)
     {
         string temp;
-        for (int i = 0; i < array.columns; i++)
+        // FORWARD VERTICAL
+        temp = "";
+        for (int k = i; k < array.rowCount; k++)
         {
-            for (int j = 0; j < array.rowCount; j++)
-            {
-                // FORWARD VERTICAL
-                temp = "";
-                for (int k = j; k < array.rowCount; k++)
-                {
-                    temp += array.arr[k][i];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, j + 1, i + 1, j + 1, i + temp.length());
-                }
+            temp += array.arr[k][j];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, j + 1, i + temp.length(), j + 1);
+        }
 
-                // BACKWARD VERTICAL
-                temp = "";
-                for (int l = array.rowCount - j - 1; l >= 0; l--)
-                {
-                    temp += array.arr[l][i];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, l + temp.length(), i + 1, l + 1, i + 1);
-                }
-            }
+        // BACKWARD VERTICAL
+        temp = "";
+        for (int k = i; k >= 0; k--)
+        {
+            temp += array.arr[k][j];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, j + 1, i - temp.length() + 2, j + 1);
         }
     }
 
-    void diagonal(Array2D array)
+    void diagonal(Array2D array, int i, int j)
     {
         string temp;
-        for (int i = 0; i < array.rowCount; i++)
+
+        // UPPER LEFT DIAGONAL
+        temp = "";
+        for (int k = i, l = j; k >= 0 && l >= 0; k--, l--)
         {
-            for (int j = 0; j < array.columns; j++)
-            {
-                // UPPER LEFT DIAGONAL
-                temp = "";
-                for (int k = i, l = j; k >= 0 && l >= 0; k--, l--)
-                {
-                    temp += array.arr[k][l];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, i + 1, j + 1, i - temp.length() + 2, j - temp.length() + 2);
-                }
+            temp += array.arr[k][l];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, j + 1, i - temp.length() + 2, j - temp.length() + 2);
+        }
 
-                // UPPER RIGHT DIAGONAL
-                temp = "";
-                for (int k = i, l = j; k >= 0 && l < array.columns; k--, l++)
-                {
-                    temp += array.arr[k][l];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, i + 1, j + 1, i - temp.length() + 2, j + temp.length());
-                }
+        // UPPER RIGHT DIAGONAL
+        temp = "";
+        for (int k = i, l = j; k >= 0 && l < array.columns; k--, l++)
+        {
+            temp += array.arr[k][l];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, j + 1, i - temp.length() + 2, j + temp.length());
+        }
 
-                // LOWER LEFT DIAGONAL
-                temp = "";
-                for (int k = i, l = j; k < array.rowCount && l >= 0; k++, l--)
-                {
-                    temp += array.arr[k][l];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, i + 1, j + 1, i + temp.length(), j - temp.length() + 2);
-                }
+        // LOWER LEFT DIAGONAL
+        temp = "";
+        for (int k = i, l = j; k < array.rowCount && l >= 0; k++, l--)
+        {
+            temp += array.arr[k][l];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, j + 1, i + temp.length(), j - temp.length() + 2);
+        }
 
-                // LOWER RIGHT DIAGONAL
-                temp = "";
-                for (int k = i, l = j; k < array.rowCount && l < array.columns; k++, l++)
-                {
-                    temp += array.arr[k][l];
-                    if (dictionary.searchTrie(temp))
-                        writeResult(temp, i + 1, j + 1, i + temp.length(), j + temp.length());
-                }
-            }
+        // LOWER RIGHT DIAGONAL
+        temp = "";
+        for (int k = i, l = j; k < array.rowCount && l < array.columns; k++, l++)
+        {
+            temp += array.arr[k][l];
+            if (dictionary.searchTrie(temp))
+                writeResult(temp, i + 1, j + 1, i + temp.length(), j + temp.length());
         }
     }
 
@@ -244,11 +227,15 @@ public:
         writeFile.open(WritePath);
         writeFile.close();
 
-        horizontal(array);
-        // cout << endl;
-        vertical(array);
-        // cout << endl;
-        diagonal(array);
+        for (int i = 0; i < array.rowCount; i++)
+        {
+            for (int j = 0; j < array.columns; j++)
+            {
+                horizontal(array, i, j);
+                vertical(array, i, j);
+                diagonal(array, i, j);
+            }
+        }
     }
 };
 
