@@ -1,3 +1,8 @@
+/**
+ * @file tries.h
+ * @brief Header file for trie implementation
+ *
+ */
 #pragma once
 
 #include <iostream>
