@@ -64,7 +64,7 @@ private:
             return;
         }
 
-        tempPtr = tempPtr->right;
+        tempPtr = nodePtr->right;
         while (tempPtr->left)
             tempPtr = tempPtr->left;
 
@@ -88,13 +88,13 @@ private:
         return;
     }
 
-    void displayReverseInorder(treeNode *root)
+    void displayReverseInOrder(treeNode *root)
     {
-        if (root)
+        if (!root)
             return;
-        displayReverseInorder(root->right);
+        displayReverseInOrder(root->right);
         cout << root->value << endl;
-        displayReverseInorder(root->left);
+        displayReverseInOrder(root->left);
     }
 
     void displayPreOrder(treeNode *nodePtr)
@@ -186,8 +186,7 @@ private:
             return 0;
 
         int res = 0;
-        if ((root->left == NULL && root->right != NULL) ||
-            (root->left != NULL && root->right == NULL))
+        if ((root->left && !root->right) || (!root->left && root->right))
             res++;
 
         res += (getHalfCount(root->left) + getHalfCount(root->right));
@@ -226,6 +225,80 @@ private:
         return kthLargest(root->left, k);
     }
 
+    int height(treeNode *node)
+    {
+        if (!node)
+            return 0;
+
+        int leftHeight = height(node->left);
+        int rightHeight = height(node->right);
+
+        return max(leftHeight, rightHeight);
+    }
+
+    void printCurrentLevel(treeNode *node, int level)
+    {
+        if (!root)
+            return;
+
+        if (level == 1)
+            cout << root->value << endl;
+        else if (level > 1)
+        {
+            printCurrentLevel(node->left, level - 1);
+            printCurrentLevel(node->right, level - 1);
+        }
+    }
+
+    void printLevel(treeNode *node, int level)
+    {
+        if (!node)
+            return;
+
+        if (level == 1)
+            cout << node->value << ", ";
+        else if (level > 1)
+        {
+            printLevel(node->left, level - 1);
+            printLevel(node->right, level - 1);
+        }
+    }
+
+    void LevelTraversal(treeNode *node)
+    {
+        int treeHeight = height(node);
+        for (int i = 1; i <= treeHeight; i += 1)
+        {
+            cout << endl
+                 << "Level " << i << ": ";
+            printLevel(node, i);
+        }
+    }
+
+    void sumLevel(treeNode *node, int level, int &sum)
+    {
+        if (!node)
+            return;
+
+        if (level == 1)
+            sum += node->value;
+        else if (level > 1)
+        {
+            sumLevel(node->left, level - 1, sum);
+            sumLevel(node->right, level - 1, sum);
+        }
+    }
+
+    int getSumLevel(treeNode *node, int start)
+    {
+        int sum = 0;
+        int treeHeight = height(node);
+        for (int i = start; i <= treeHeight; i += 2)
+            sumLevel(node, i, sum);
+
+        return sum;
+    }
+
 public:
     BinaryTree()
     {
@@ -239,15 +312,15 @@ public:
 
     void insertNode(int value)
     {
-        treeNode *newnode, *tempPtr;
+        treeNode *newNode, *tempPtr;
 
-        newnode = new treeNode;
-        newnode->value = value;
-        newnode->left = newnode->right = NULL;
+        newNode = new treeNode;
+        newNode->value = value;
+        newNode->left = newNode->right = NULL;
 
         if (!root)
         {
-            root = newnode;
+            root = newNode;
             return;
         }
 
@@ -260,7 +333,7 @@ public:
                     tempPtr = tempPtr->left;
                 else
                 {
-                    tempPtr->left = newnode;
+                    tempPtr->left = newNode;
                     return;
                 }
             }
@@ -270,7 +343,7 @@ public:
                     tempPtr = tempPtr->right;
                 else
                 {
-                    tempPtr->right = newnode;
+                    tempPtr->right = newNode;
                     return;
                 }
             }
@@ -304,7 +377,7 @@ public:
 
     void printNodesReverseOrder()
     {
-        displayReverseInorder(root);
+        displayReverseInOrder(root);
         return;
     }
 
@@ -379,5 +452,27 @@ public:
     int getKthLargest(int k)
     {
         return kthLargest(root, k)->value;
+    }
+
+    int getTreeHeight()
+    {
+        return height(root);
+    }
+
+    int getHeight()
+    {
+        return height(root);
+    }
+
+    void TraverseLevel()
+    {
+        LevelTraversal(root);
+    }
+
+    void differenceEvenOdd()
+    {
+        cout << "Sum of odd  level nodes: " << getSumLevel(root, 1) << endl
+             << "Sum of even level nodes: " << getSumLevel(root, 2) << endl
+             << "Difference: " << getSumLevel(root, 1) - getSumLevel(root, 2) << endl;
     }
 };
