@@ -1,0 +1,44 @@
+505 605 Main-Gate
+455 570 adminBlock
+586 578 clockTower
+670 580 guestHouse
+700 510 hblBank
+765 555 GIKI-COLLEGE
+460 365 ACADEMIC-BLOCK
+660 275 brabersBuilding
+515 265 centralLibrary
+465 100 facultyClub
+630 185 graduateHostel
+390 410 fes
+460 460 fcse
+550 470 fme
+625 420 fmc
+
+
+15 cafeteria
+16 auditorium
+17 playground
+75,520 18 sportsComplex
+19 hostel1
+20 hostel2
+21 hostel3
+22 hostel4
+23 hostel5
+24 hostel6
+25 hostel7
+26 hostel8
+27 hostel9
+28 hostel10
+29 hostel11
+30 hostel12
+31 studentMosque
+32 mess
+33 hvacPlant
+34 medicalCenter
+35 tuc
+36 facultyMosque
+
+
+0 JUNCTION 1
+1 JUNCTION 2
+
